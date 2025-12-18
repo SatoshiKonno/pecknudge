@@ -1,4 +1,7 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { ChevronRight, Menu } from 'lucide-react';
 
 // --- Components ---
@@ -40,7 +43,6 @@ const Navbar = () => {
 
 const Hero = () => (
   <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_50%_50%,#2e1065_0%,#0a0a0c_100%)] pt-20">
-    {/* Background Decorative Elements */}
     <div className="absolute top-1/4 -left-20 w-96 h-96 bg-[#ff007a]/10 rounded-full blur-[120px] animate-pulse"></div>
     <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#a855f7]/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
 
@@ -56,13 +58,13 @@ const Hero = () => (
         ビジネスに圧倒的なインパクトをもたらす。
       </p>
       <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-        <a 
-          href="#tool" 
+        <Link 
+          href="/tool" 
           className="group relative bg-white text-black px-10 py-5 rounded-full font-bold text-lg hover:bg-[#ff007a] hover:text-white transition-all duration-300 shadow-2xl flex items-center gap-2 overflow-hidden"
         >
           <span className="relative z-10">アイディア出しツールを試す</span>
           <ChevronRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
-        </a>
+        </Link>
         <a 
           href="#about" 
           className="px-10 py-5 rounded-full font-bold text-lg text-white border border-white/20 hover:border-[#ff007a] hover:text-[#ff007a] transition-all duration-300 backdrop-blur-sm"
@@ -72,7 +74,6 @@ const Hero = () => (
       </div>
     </div>
     
-    {/* Scroll Indicator */}
     <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
       <span className="text-[10px] text-white uppercase tracking-[0.3em]">Scroll</span>
       <div className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent"></div>
@@ -129,13 +130,10 @@ const About = () => {
                 行動経済テクノロジスト（兼 行動経済学検定1級）・行動心理士
               </p>
               <p>
-                富士通、SAS、Salesforceなどを経て、デジタルマーケティングに関する施策立案・開発・運用・データ分析まで広範囲な業務を経験。Salesforceではデジタルマーケティング部 部長として組織オペレーション改善などにも注力。
+                富士通、SAS、Salesforceなどを経て、デジタルマーケティングに関する施策立案・開発・運用・データ分析まで広範囲な業務を経験。
               </p>
               <p>
                 Brazeでは、約30社の活用支援、カスタマーマーケティング、早稲田大学 消費者行動研究所との共同研究を担当。
-              </p>
-              <p>
-                現職の傍らで、行動経済テクノロジストとしても活動しており、書籍の出版や、小規模事業者に対するマーケティング戦略立案と実践の支援も行っている。
               </p>
             </div>
 
@@ -145,15 +143,13 @@ const About = () => {
                 <ul className="text-white/80 text-sm space-y-1">
                   <li>• 行動経済学 / 心理学</li>
                   <li>• デジタルマーケティング戦略</li>
-                  <li>• データ分析・オペレーション改善</li>
                 </ul>
               </div>
               <div>
                 <p className="text-[#ff007a] text-[10px] uppercase tracking-[0.3em] font-bold mb-2">活動内容</p>
                 <ul className="text-white/80 text-sm space-y-1">
                   <li>• 学術研究</li>
-                  <li>• マーケティング戦略コンサルティング</li>
-                  <li>• 執筆・出版活動</li>
+                  <li>• 戦略コンサルティング</li>
                 </ul>
               </div>
             </div>
@@ -166,16 +162,12 @@ const About = () => {
 
 const Footer = () => (
   <footer className="py-16 bg-black border-t border-white/5 relative overflow-hidden">
-    <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
+    <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 relative z-10 text-center">
       <div className="text-white font-bold text-2xl tracking-tighter font-rounded">
         Peck<span className="text-[#ff007a]">nudge</span>
       </div>
       <div className="text-gray-500 text-xs tracking-widest">
         &copy; 2025 Pecknudge LLC. ALL RIGHTS RESERVED.
-      </div>
-      <div className="flex space-x-6 text-gray-400">
-        <a href="#" className="hover:text-white transition-colors">Privacy</a>
-        <a href="#" className="hover:text-white transition-colors">Terms</a>
       </div>
     </div>
   </footer>
@@ -188,19 +180,5 @@ export default function App() {
         @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&display=swap');
         .font-rounded { font-family: 'M PLUS Rounded 1c', sans-serif; }
         html { scroll-behavior: smooth; }
-        
         @keyframes gradient-x {
-          0%, 100% { background-size: 200% 200%; background-position: left center; }
-          50% { background-size: 200% 200%; background-position: right center; }
-        }
-        .animate-gradient-x {
-          animation: gradient-x 5s ease infinite;
-        }
-      `}} />
-      <Navbar />
-      <Hero />
-      <About />
-      <Footer />
-    </div>
-  );
-}
+          0%, 100% { background-size
