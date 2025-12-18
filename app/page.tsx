@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Menu, Play } from 'lucide-react';
+import { ChevronRight, Menu, Play, X, Send, CheckCircle2 } from 'lucide-react';
 
 // --- Components ---
 
-const Navbar = () => {
+const Navbar = ({ onContactClick }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -20,16 +20,17 @@ const Navbar = () => {
     <nav className={`fixed top-0 w-full z-50 px-6 py-4 flex justify-between items-center transition-all duration-300 ${isScrolled ? 'bg-black/80 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}>
       <div className="flex items-center gap-2">
         <div className="h-8 md:h-10 flex items-center">
-          <span className="text-white font-bold text-2xl tracking-tighter font-rounded">
-            Peck<span className="text-[#ff007a]">nudge</span>
-          </span>
+          <img src="/textlogo_pinkandwhite.png" alt="Pecknudge" className="h-full w-auto object-contain" />
         </div>
       </div>
       <div className="hidden md:flex space-x-8 text-sm font-medium items-center">
         <a href="#about" className="text-white/70 hover:text-[#ff007a] transition-colors uppercase tracking-widest">About</a>
-        <a href="#diagram" className="text-white/70 hover:text-[#ff007a] transition-colors uppercase tracking-widest">Diagram</a>
+        <a href="/tool" className="text-white/70 hover:text-[#ff007a] transition-colors uppercase tracking-widest">Workshop</a>
         <a href="#cases" className="text-white/70 hover:text-[#ff007a] transition-colors uppercase tracking-widest">Cases</a>
-        <button className="bg-[#ff007a] px-6 py-2 rounded-full text-white font-bold hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(255,0,122,0.3)]">
+        <button 
+          onClick={onContactClick}
+          className="bg-[#ff007a] px-6 py-2 rounded-full text-white font-bold hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(255,0,122,0.3)]"
+        >
           CONTACT
         </button>
       </div>
@@ -40,7 +41,137 @@ const Navbar = () => {
   );
 };
 
-const Hero = () => (
+const ContactModal = ({ isOpen, onClose }) => {
+  const [status, setStatus] = useState('idle'); // idle, sending, success, error
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('sending');
+    const form = e.target;
+    const data = new FormData(form);
+
+    try {
+      const response = await fetch("https://formspree.io/f/meejjdbw", {
+        method: "POST",
+        body: data,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      if (response.ok) {
+        setStatus('success');
+        form.reset();
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      setStatus('error');
+    }
+  };
+
+  const inputStyles = "w-full border border-pink-100/50 rounded-2xl px-6 py-4 text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-[#ff007a] transition-colors shadow-sm bg-[#fff9fb]";
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
+        onClick={() => status !== 'sending' && onClose()}
+      />
+      <div className="relative w-full max-w-lg bg-zinc-900 border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+        <button 
+          onClick={onClose}
+          className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors"
+        >
+          <X size={24} />
+        </button>
+
+        <div className="p-8 md:p-12">
+          {status === 'success' ? (
+            <div className="text-center py-12">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#ff007a]/10 mb-6 text-[#ff007a]">
+                <CheckCircle2 size={40} />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4 font-rounded">送信完了</h3>
+              <p className="text-gray-400 mb-8">
+                お問い合わせありがとうございます。<br />
+                内容を確認次第、担当者よりご連絡いたします。
+              </p>
+              <button 
+                onClick={onClose}
+                className="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-[#ff007a] hover:text-white transition-all"
+              >
+                閉じる
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="mb-8">
+                <h3 className="text-2xl md:text-3xl font-bold text-white font-rounded mb-2 tracking-tight">CONTACT</h3>
+                <p className="text-gray-400 text-sm">プロジェクトのご相談、ワークショップのご依頼などお気軽にお送りください。</p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-white/50 text-[10px] uppercase tracking-widest font-bold mb-2 ml-1">Name</label>
+                  <input 
+                    type="text" 
+                    name="name" 
+                    required 
+                    placeholder="お名前"
+                    className={inputStyles}
+                  />
+                </div>
+                <div>
+                  <label className="block text-white/50 text-[10px] uppercase tracking-widest font-bold mb-2 ml-1">Email</label>
+                  <input 
+                    type="email" 
+                    name="email" 
+                    required 
+                    placeholder="メールアドレス"
+                    className={inputStyles}
+                  />
+                </div>
+                <div>
+                  <label className="block text-white/50 text-[10px] uppercase tracking-widest font-bold mb-2 ml-1">Message</label>
+                  <textarea 
+                    name="message" 
+                    required 
+                    rows="4"
+                    placeholder="お問い合わせ内容をご入力ください"
+                    className={`${inputStyles} resize-none`}
+                  ></textarea>
+                </div>
+
+                {status === 'error' && (
+                  <p className="text-red-500 text-xs text-center">エラーが発生しました。時間を置いて再度お試しください。</p>
+                )}
+
+                <button 
+                  type="submit" 
+                  disabled={status === 'sending'}
+                  className="w-full bg-[#ff007a] text-white py-5 rounded-full font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-[#ff007a]/20 flex items-center justify-center gap-3 disabled:opacity-50"
+                >
+                  {status === 'sending' ? (
+                    <span className="animate-pulse">送信中...</span>
+                  ) : (
+                    <>
+                      <span>送信する</span>
+                      <Send size={18} />
+                    </>
+                  )}
+                </button>
+              </form>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Hero = ({ onContactClick }) => (
   <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_50%_50%,#2e1065_0%,#0a0a0c_100%)] pt-20">
     <div className="absolute top-1/4 -left-20 w-96 h-96 bg-[#ff007a]/10 rounded-full blur-[120px] animate-pulse"></div>
     <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#a855f7]/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
@@ -58,18 +189,18 @@ const Hero = () => (
       </p>
       <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
         <a 
-          href="#tool" 
+          href="/tool" 
           className="group relative bg-white text-black px-10 py-5 rounded-full font-bold text-lg hover:bg-[#ff007a] hover:text-white transition-all duration-300 shadow-2xl flex items-center gap-2 overflow-hidden"
         >
           <span className="relative z-10">アイディア出しツールを試す</span>
           <ChevronRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
         </a>
-        <a 
-          href="#about" 
+        <button 
+          onClick={onContactClick}
           className="px-10 py-5 rounded-full font-bold text-lg text-white border border-white/20 hover:border-[#ff007a] hover:text-[#ff007a] transition-all duration-300 backdrop-blur-sm"
         >
           ペックナッジについて
-        </a>
+        </button>
       </div>
     </div>
     
@@ -94,7 +225,8 @@ const About = () => {
         <div className="flex flex-col lg:flex-row items-center gap-16 justify-center max-w-6xl mx-auto">
           <div className="relative group shrink-0">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#a855f7] to-[#ff007a] rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-            <div className="relative w-72 h-96 md:w-80 md:h-[480px] bg-white rounded-[2rem] border border-white/10 overflow-hidden flex items-center justify-center">
+            {/* プロフィール背景色を #fff9fb に変更 */}
+            <div className="relative w-72 h-96 md:w-80 md:h-[480px] bg-[#fff9fb] rounded-[2rem] border border-white/10 overflow-hidden flex items-center justify-center">
                {!imgError ? (
                  <img 
                    src="/satoshi_konno.png" 
@@ -103,7 +235,7 @@ const About = () => {
                    onError={() => setImgError(true)}
                  />
                ) : (
-                 <div className="flex items-center justify-center text-zinc-900/50 text-xl font-bold italic">PORTRAIT</div>
+                 <div className="flex items-center justify-center text-zinc-900/20 text-xl font-bold italic">PORTRAIT</div>
                )}
             </div>
           </div>
@@ -234,16 +366,17 @@ const Cases = () => {
   );
 };
 
-const Footer = () => (
+const Footer = ({ onContactClick }) => (
   <footer className="py-16 bg-black border-t border-white/5 relative overflow-hidden">
     <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
-      <div className="text-white font-bold text-2xl tracking-tighter font-rounded">
-        Peck<span className="text-[#ff007a]">nudge</span>
+      <div className="h-8 md:h-10">
+        <img src="/textlogo_pinkandwhite.png" alt="Pecknudge" className="h-full w-auto object-contain" />
       </div>
       <div className="text-gray-500 text-xs tracking-widest">
         &copy; 2025 Pecknudge LLC. ALL RIGHTS RESERVED.
       </div>
       <div className="flex space-x-6 text-gray-400">
+        <button onClick={onContactClick} className="hover:text-white transition-colors">Contact</button>
         <a href="#" className="hover:text-white transition-colors">Privacy</a>
         <a href="#" className="hover:text-white transition-colors">Terms</a>
       </div>
@@ -252,6 +385,8 @@ const Footer = () => (
 );
 
 export default function App() {
+  const [isContactOpen, setIsContactOpen] = useState(false);
+
   return (
     <div className="bg-[#0a0a0c] min-h-screen selection:bg-[#ff007a] selection:text-white">
       <style dangerouslySetInnerHTML={{ __html: `
@@ -267,11 +402,16 @@ export default function App() {
           animation: gradient-x 5s ease infinite;
         }
       `}} />
-      <Navbar />
-      <Hero />
+      <Navbar onContactClick={() => setIsContactOpen(true)} />
+      <Hero onContactClick={() => setIsContactOpen(true)} />
       <About />
       <Cases />
-      <Footer />
+      <Footer onContactClick={() => setIsContactOpen(true)} />
+      
+      <ContactModal 
+        isOpen={isContactOpen} 
+        onClose={() => setIsContactOpen(false)} 
+      />
     </div>
   );
 }
