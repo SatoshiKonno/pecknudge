@@ -125,33 +125,16 @@ const About = () => {
             </div>
 
             <div className="space-y-6 text-gray-400 leading-relaxed text-base md:text-lg mb-10">
-              <p className="font-medium text-white/90">
+              <p className="font-medium text-white/90 text-left">
                 Braze株式会社 プリンシパルカスタマーサクセスマネージャー<br />
                 行動経済テクノロジスト（兼 行動経済学検定1級）・行動心理士
               </p>
-              <p>
+              <p className="text-left">
                 富士通、SAS、Salesforceなどを経て、デジタルマーケティングに関する施策立案・開発・運用・データ分析まで広範囲な業務を経験。
               </p>
-              <p>
+              <p className="text-left">
                 Brazeでは、約30社の活用支援、カスタマーマーケティング、早稲田大学 消費者行動研究所との共同研究を担当。
               </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-8 border-t border-white/10 pt-8">
-              <div>
-                <p className="text-[#ff007a] text-[10px] uppercase tracking-[0.3em] font-bold mb-2">専門領域</p>
-                <ul className="text-white/80 text-sm space-y-1">
-                  <li>• 行動経済学 / 心理学</li>
-                  <li>• デジタルマーケティング戦略</li>
-                </ul>
-              </div>
-              <div>
-                <p className="text-[#ff007a] text-[10px] uppercase tracking-[0.3em] font-bold mb-2">活動内容</p>
-                <ul className="text-white/80 text-sm space-y-1">
-                  <li>• 学術研究</li>
-                  <li>• 戦略コンサルティング</li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>
@@ -160,25 +143,4 @@ const About = () => {
   );
 };
 
-const Footer = () => (
-  <footer className="py-16 bg-black border-t border-white/5 relative overflow-hidden">
-    <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 relative z-10 text-center">
-      <div className="text-white font-bold text-2xl tracking-tighter font-rounded">
-        Peck<span className="text-[#ff007a]">nudge</span>
-      </div>
-      <div className="text-gray-500 text-xs tracking-widest">
-        &copy; 2025 Pecknudge LLC. ALL RIGHTS RESERVED.
-      </div>
-    </div>
-  </footer>
-);
-
-export default function App() {
-  return (
-    <div className="bg-[#0a0a0c] min-h-screen selection:bg-[#ff007a] selection:text-white">
-      <style dangerouslySetInnerHTML={{ __html: `
-        @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&display=swap');
-        .font-rounded { font-family: 'M PLUS Rounded 1c', sans-serif; }
-        html { scroll-behavior: smooth; }
-        @keyframes gradient-x {
-          0%, 100% { background-size
+const Footer
