@@ -1,11 +1,22 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Menu, Play, X, Send, CheckCircle2 } from 'lucide-react';
+import { ChevronRight, Menu, X, Send, CheckCircle2 } from 'lucide-react';
+
+// --- Types ---
+
+interface NavProps {
+  onContactClick: () => void;
+}
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
 // --- Components ---
 
-const Navbar = ({ onContactClick }) => {
+const Navbar: React.FC<NavProps> = ({ onContactClick }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -41,15 +52,15 @@ const Navbar = ({ onContactClick }) => {
   );
 };
 
-const ContactModal = ({ isOpen, onClose }) => {
-  const [status, setStatus] = useState('idle'); // idle, sending, success, error
+const ContactModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('sending');
-    const form = e.target;
+    const form = e.currentTarget;
     const data = new FormData(form);
 
     try {
@@ -138,7 +149,7 @@ const ContactModal = ({ isOpen, onClose }) => {
                   <textarea 
                     name="message" 
                     required 
-                    rows="4"
+                    rows={4}
                     placeholder="お問い合わせ内容をご入力ください"
                     className={`${inputStyles} resize-none`}
                   ></textarea>
@@ -171,7 +182,7 @@ const ContactModal = ({ isOpen, onClose }) => {
   );
 };
 
-const Hero = ({ onContactClick }) => (
+const Hero: React.FC<NavProps> = ({ onContactClick }) => (
   <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_50%_50%,#2e1065_0%,#0a0a0c_100%)] pt-20">
     <div className="absolute top-1/4 -left-20 w-96 h-96 bg-[#ff007a]/10 rounded-full blur-[120px] animate-pulse"></div>
     <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#a855f7]/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
@@ -211,7 +222,7 @@ const Hero = ({ onContactClick }) => (
   </section>
 );
 
-const About = () => {
+const About: React.FC = () => {
   const [imgError, setImgError] = useState(false);
 
   return (
@@ -225,7 +236,6 @@ const About = () => {
         <div className="flex flex-col lg:flex-row items-center gap-16 justify-center max-w-6xl mx-auto">
           <div className="relative group shrink-0">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#a855f7] to-[#ff007a] rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-            {/* プロフィール背景色を #fff9fb に変更 */}
             <div className="relative w-72 h-96 md:w-80 md:h-[480px] bg-[#fff9fb] rounded-[2rem] border border-white/10 overflow-hidden flex items-center justify-center">
                {!imgError ? (
                  <img 
@@ -296,7 +306,7 @@ const About = () => {
   );
 };
 
-const Cases = () => {
+const Cases: React.FC = () => {
   const videoData = [
     {
       id: "96rt6mD-JKM",
@@ -347,26 +357,12 @@ const Cases = () => {
             </div>
           ))}
         </div>
-
-        <div className="mt-24 text-center">
-          <a 
-            href="https://www.youtube.com/@SatoshiKonno_Pecknudge" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 text-white/50 hover:text-white transition-colors group"
-          >
-            <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#ff007a] group-hover:bg-[#ff007a]/10 transition-all">
-               <Play size={16} fill="currentColor" className="ml-0.5" />
-            </div>
-            <span className="font-bold tracking-widest text-sm">VIEW ALL ON YOUTUBE</span>
-          </a>
-        </div>
       </div>
     </section>
   );
 };
 
-const Footer = ({ onContactClick }) => (
+const Footer: React.FC<NavProps> = ({ onContactClick }) => (
   <footer className="py-16 bg-black border-t border-white/5 relative overflow-hidden">
     <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
       <div className="h-8 md:h-10">
